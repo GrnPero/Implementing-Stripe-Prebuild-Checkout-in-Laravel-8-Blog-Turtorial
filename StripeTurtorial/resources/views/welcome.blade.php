@@ -119,6 +119,53 @@
                             <a href="https://github.com/sponsors/taylorotwell" class="ml-1 underline">
                                 Sponsor
                             </a>
+
+                            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" class="-mt-px w-5 h-5 text-gray-400">
+                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+
+                            <form action="/payment" method="POST">
+                                @csrf
+                                <button  id="checkout-button">Proceed to Checkout</button>
+                            </form>
+
+                            <script type="text/javascript">
+                                // Create an instance of the Stripe object with your publishable API key
+                                var stripe = Stripe('pk_test_51Hp3dYAwSxqExbxqCH4gq1bxTgZLiLI9568MFj457Z2h4iKsDIdpDlYBjxw9PgN6gHyYwLRmEzkcpaTQIzaX6gga00QXSLWfrC');
+                                var checkoutButton = document.getElementById('checkout-button');
+
+                                checkoutButton.addEventListener('click', function() {
+                                    // Create a new Checkout Session using the server-side endpoint you
+                                    // created in step 3.
+                                    fetch('/payment', {
+                                    method: 'POST', 
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'url': '/payment',
+                                        "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                                    },
+                                })
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(session) {
+                                    return stripe.redirectToCheckout({ sessionId: session.id });
+                                })
+                                .then(function(result) {
+                                    // If `redirectToCheckout` fails due to a browser or network
+                                    // error, you should display the localized error message to your
+                                    // customer using `error.message`.
+                                    if (result.error) {
+                                        alert(result.error.message);
+                                    }
+                                })
+                                .catch(function(error) {
+                                    console.error('Error:', error);
+                                });
+                            });
+                        </script>
+
                         </div>
                     </div>
 
