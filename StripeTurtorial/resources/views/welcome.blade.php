@@ -19,6 +19,9 @@
                 font-family: 'Nunito';
             }
         </style>
+
+        <!-- For Stripe Checkout --!>
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body class="antialiased">
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
@@ -126,8 +129,8 @@
 
                             <form action="/payment" method="POST">
                                 @csrf
-                                <button  id="checkout-button">Proceed to Checkout</button>
-                            </form>
+                                <button id="checkout-button">Proceed to Checkout</button>
+                            
 
                             <script type="text/javascript">
                                 // Create an instance of the Stripe object with your publishable API key
@@ -138,33 +141,34 @@
                                     // Create a new Checkout Session using the server-side endpoint you
                                     // created in step 3.
                                     fetch('/payment', {
-                                    method: 'POST', 
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json',
-                                        'url': '/payment',
-                                        "X-CSRF-Token": document.querySelector('input[name=_token]').value
-                                    },
-                                })
-                                .then(function(response) {
-                                    return response.json();
-                                })
-                                .then(function(session) {
-                                    return stripe.redirectToCheckout({ sessionId: session.id });
-                                })
-                                .then(function(result) {
-                                    // If `redirectToCheckout` fails due to a browser or network
-                                    // error, you should display the localized error message to your
-                                    // customer using `error.message`.
-                                    if (result.error) {
-                                        alert(result.error.message);
-                                    }
-                                })
-                                .catch(function(error) {
-                                    console.error('Error:', error);
+                                        method: 'POST', 
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json',
+                                            'url': '/payment',
+                                            "X-CSRF-Token": document.querySelector('input[name=_token]').value
+                                        },
+                                    })
+                                    .then(function(response) {
+                                        return response.json();
+                                    })
+                                    .then(function(session) {
+                                        return stripe.redirectToCheckout({ sessionId: session.id });
+                                    })
+                                    .then(function(result) {
+                                        // If `redirectToCheckout` fails due to a browser or network
+                                        // error, you should display the localized error message to your
+                                        // customer using `error.message`.
+                                        if (result.error) {
+                                            alert(result.error.message);
+                                        }
+                                    })
+                                    .catch(function(error) {
+                                        console.error('Error:', error);
+                                    });
                                 });
-                            });
                         </script>
+                        </form>
 
                         </div>
                     </div>
