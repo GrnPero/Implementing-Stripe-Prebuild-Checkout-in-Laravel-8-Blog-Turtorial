@@ -130,11 +130,11 @@
                             <form action="/payment" method="POST">
                                 @csrf
                                 <button id="checkout-button">Proceed to Checkout</button>
-                            
+                            </form>
 
                             <script type="text/javascript">
                                 // Create an instance of the Stripe object with your publishable API key
-                                var stripe = Stripe('pk_test_51Hp3dYAwSxqExbxqCH4gq1bxTgZLiLI9568MFj457Z2h4iKsDIdpDlYBjxw9PgN6gHyYwLRmEzkcpaTQIzaX6gga00QXSLWfrC');
+                                var stripe = Stripe('pk_test_********'); // Add your own
                                 var checkoutButton = document.getElementById('checkout-button');
 
                                 checkoutButton.addEventListener('click', function() {
@@ -168,7 +168,6 @@
                                     });
                                 });
                         </script>
-                        </form>
 
                         </div>
                     </div>
